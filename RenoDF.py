@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jan 18 21:02:05 2021
-
 bringing FTPaccess, datascrape, and basicDF together to construct a dataframe containing
 the tax assessor data, which we save in the HDF5 format for easy access
-
 --------------------------------------------------
 Be careful when running this - the datascrape part takes a long time because it redownloads all of the CSVs
 --------------------------------------------------
-
 @author: mjwma
 """
 
@@ -17,7 +14,9 @@ import os
 import pandas as pd
 import glob
 from datetime import date
+import time
 
+start_time = time.time()
 cwd = os.getcwd()
 
 def FTPaccess():
@@ -100,8 +99,26 @@ def basicDF():
     return df
 
 FTPaccess()
+ftp_time = time.time()
+
+print("FTPaccess function execution time: %.2f s" %(ftp_time - start_time))
+print("Total time elapsed: %.2f s" %(ftp_time - start_time))
+
 datascrape()
+datascrape_time = time.time()
+
+print("FTPaccess function execution time: %.2f s" %(datascrape_time - ftp_time))
+print("Total time elapsed: %.2f s" %(datascrape_time - start_time))
+
 df = basicDF()
+df_time = time.time()
+
+print("FTPaccess function execution time: %.2f s" %(df_time - datascrape_time))
+print("Total time elapsed: %.2f s" %(df_time - start_time))
 
 df.to_hdf('RenoData' + date.today().strftime('%b-%d-%Y') + '.h5', key='df', mode='w')
 print("Dataframe has been saved to " + 'RenoData' + date.today().strftime('%b-%d-%Y') + '.h5')
+h5_time = time.time()
+
+print("HDF5 saving time: %.2f s" %(h5_time - df_time))
+print("Total program runtime: %.2f s" %(h5_time - start_time))
