@@ -18,6 +18,8 @@ import pandas as pd
 import glob
 from datetime import date
 
+cwd = os.getcwd()
+
 def FTPaccess():
     """
     this script grabs the first 3 digits of the APN for the tax assessor site
@@ -57,6 +59,7 @@ def datascrape():
     
     fid = open('apn2.txt', 'r')
     apn = fid.readlines()
+    fid.close()
     for i in range(len(apn)):
         apn[i] = apn[i][:-1]
     #print(apn)
@@ -64,11 +67,17 @@ def datascrape():
     print('Downloading CSVs...')
     apn_len = len(apn)
     file_iter = 1
+    
+    #checks if a CSVs folder exists, and if it does not, makes one
+    if not os.path.exists(cwd + '\\CSVs'):
+        os.makedirs(cwd+'\\CSVs')
+        print("Made CSVs folder")
+    
     for i in apn:
         print("Downloading file " + str(file_iter) + " / " + str(apn_len))
         url = 'https://www.washoecounty.us/assessor/cama/qi_list.php?search_term='+i+'&noclosed=0&sonly=strap'
         csv = requests.get(url)
-        pathname = os.path.join('C:\\Users\\mjwma\\Desktop\\Python Projects\\HousingPortal\\Reno\\CSVs',i+'.csv')
+        pathname = os.path.join(cwd + '\\CSVs',i+'.csv')
         with open(pathname,'wb') as output:
             output.write(csv.content)
         file_iter += 1
@@ -78,7 +87,7 @@ def basicDF():
     basic dataframe construction, no filtering, etc
     """
     
-    path = 'C:\\Users\\mjwma\\Desktop\\Python Projects\\HousingPortal\\Reno\\CSVs'
+    path = cwd + '\\CSVs'
     #makes a list of all of the CSVs in the folder
     all_files = glob.glob(path + '/*.csv')
     #print(all_files)
