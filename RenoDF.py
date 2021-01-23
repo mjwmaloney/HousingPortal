@@ -33,8 +33,7 @@ def FTPaccess():
         print(ftp.getwelcome())
         ftp.login()
         ftp.cwd('outtoworld/assessor-books')
-        print('We are currently in')
-        print(ftp.pwd())
+        print('We are currently in' + ftp.pwd())
         
         #gets a list of all of the file/directory names
         files = ftp.nlst()
@@ -98,27 +97,31 @@ def basicDF():
     print("Dataframe has been constructed")
     return df
 
-FTPaccess()
-ftp_time = time.time()
+def DFRun():
+    FTPaccess()
+    ftp_time = time.time()
+    
+    print("FTPaccess function execution time: %.2f s" %(ftp_time - start_time))
+    print("Total time elapsed: %.2f s" %(ftp_time - start_time))
+    
+    datascrape()
+    datascrape_time = time.time()
+    
+    print("FTPaccess function execution time: %.2f s" %(datascrape_time - ftp_time))
+    print("Total time elapsed: %.2f s" %(datascrape_time - start_time))
+    
+    df = basicDF()
+    df_time = time.time()
+    
+    print("FTPaccess function execution time: %.2f s" %(df_time - datascrape_time))
+    print("Total time elapsed: %.2f s" %(df_time - start_time))
+    
+    df.to_hdf('RenoData' + date.today().strftime('%b-%d-%Y') + '.h5', key='df', mode='w')
+    print("Dataframe has been saved to " + 'RenoData' + date.today().strftime('%b-%d-%Y') + '.h5')
+    h5_time = time.time()
+    
+    print("HDF5 saving time: %.2f s" %(h5_time - df_time))
+    print("Total program runtime: %.2f s" %(h5_time - start_time))
 
-print("FTPaccess function execution time: %.2f s" %(ftp_time - start_time))
-print("Total time elapsed: %.2f s" %(ftp_time - start_time))
-
-datascrape()
-datascrape_time = time.time()
-
-print("FTPaccess function execution time: %.2f s" %(datascrape_time - ftp_time))
-print("Total time elapsed: %.2f s" %(datascrape_time - start_time))
-
-df = basicDF()
-df_time = time.time()
-
-print("FTPaccess function execution time: %.2f s" %(df_time - datascrape_time))
-print("Total time elapsed: %.2f s" %(df_time - start_time))
-
-df.to_hdf('RenoData' + date.today().strftime('%b-%d-%Y') + '.h5', key='df', mode='w')
-print("Dataframe has been saved to " + 'RenoData' + date.today().strftime('%b-%d-%Y') + '.h5')
-h5_time = time.time()
-
-print("HDF5 saving time: %.2f s" %(h5_time - df_time))
-print("Total program runtime: %.2f s" %(h5_time - start_time))
+if __name__ == "__main__":
+    DFRun()
