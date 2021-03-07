@@ -64,7 +64,7 @@ def filter_bldg_type(frame, bldg_type=
 
 def gt_beds(frame,beds):
     """
-    Returns a dataframe of properties with number of bedrooms greater than than the number entered
+    Returns a dataframe of properties with number of bedrooms greater than the number entered
     """
     
     bed_logic = frame['Beds'] > beds
@@ -73,7 +73,7 @@ def gt_beds(frame,beds):
 
 def ge_beds(frame,beds):
     """
-    Returns a dataframe of properties with number of bedrooms greater than than the number entered
+    Returns a dataframe of properties with number of bedrooms greater than or equal to the number entered
     """
     
     bed_logic = frame['Beds'] >= beds
@@ -82,7 +82,7 @@ def ge_beds(frame,beds):
 
 def lt_beds(frame,beds):
     """
-    Returns a dataframe of properties with number of bedrooms greater than than the number entered
+    Returns a dataframe of properties with number of bedrooms less than the number entered
     """
     
     bed_logic = frame['Beds'] < beds
@@ -91,7 +91,7 @@ def lt_beds(frame,beds):
 
 def le_beds(frame,beds):
     """
-    Returns a dataframe of properties with number of bedrooms greater than than the number entered
+    Returns a dataframe of properties with number of bedrooms less than or equal to the number entered
     """
     
     bed_logic = frame['Beds'] <= beds
@@ -100,7 +100,7 @@ def le_beds(frame,beds):
 
 def eq_beds(frame,beds):
     """
-    Returns a dataframe of properties with number of bedrooms greater than than the number entered
+    Returns a dataframe of properties with number of bedrooms equal to the number entered
     """
     
     bed_logic = frame['Beds'] == beds
